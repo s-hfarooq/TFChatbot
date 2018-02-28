@@ -5,7 +5,10 @@ I don't know yet
 
 Maybe it'll work at some point... maybe not...
 
-It's supposed to be better than the chatbot I tried making last year, but I don't know if this will acutually work
+It's supposed to be better than the chatbot I tried making last year, but I don't know if this will actually work
 
 
-It's supposed to be decent after it learns from Reddit comments, but knowing Redditors, it'll probably be pretty bad. 
+It's supposed to be decent after it learns from Reddit comments, but knowing Redditors, it'll probably be pretty bad.
+
+
+If you want to download the (60gb uncompressed) text file where I got the Reddit comments, go here: http://files.pushshift.io/reddit/comments/RC_2018-01.xz
