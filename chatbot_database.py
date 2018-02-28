@@ -58,7 +58,7 @@ def acceptable(data):
         return False
     elif len(data) > 1000:
         return False
-    elif data = '[removed]' or data = '[deleted]':
+    elif data == '[removed]' or data == '[deleted]':
         return False
     else:
         return True
@@ -72,7 +72,7 @@ if __name__ == "__main__": #Execute if this is the main file
     with open("D:/GitHub/TFChatbot/RC_{}".format(timeframe.split('-')[0], timeframe), buffering = 1000) as f:
         #Starts inputting data into sql table with correct formatting
         for row in f:
-            #print(row)
+            print(row)
             row_counter += 1
             row = json.loads(row)
             parent_id = row['parent_id']
@@ -88,3 +88,4 @@ if __name__ == "__main__": #Execute if this is the main file
 
                 if existing_comment_score:
                     if score > existing_comment_score:
+                        print ("hello")
