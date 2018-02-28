@@ -37,17 +37,42 @@ def find_parent(pid): #Searches for parent, returns the result if one is found
         print ("ERROR - find_parent ", e)
         return False
 
+def find_existing_score(pid):
+    try:
+        sql = "SELECT score FROM parent_reply WHERE parent_id = '{}' LIMIT 1".format(pid)
+        c.execute(sql)
+        result = c.fetchone()
 
+        if result != None:
+            return result[0]
+        else:
+            return False
+
+    except Exception as e:
+        print ("ERROR - find_parent ", e)
+        return False
+
+
+def acceptable(data):
+    if len(data.split(' ')) > 50 or len(data) < 1:
+        return False
+    elif len(data) > 1000:
+        return False
+    elif data = '[removed]' or data = '[deleted]':
+        return False
+    else:
+        return True
 
 
 if __name__ == "__main__": #Execute if this is the main file
-row_counter = 0 #How many rows it's gone through
+    row_counter = 0 #How many rows it's gone through
     create_table()
     paired_rows = 0 #Parent/child pairs
 
-    with open("D:\GitHub\TFChatbot\RC_{}".format(timeframe.split('-')[0], timeframe), buffer = 1000) as f:
+    with open("D:/GitHub/TFChatbot/RC_{}".format(timeframe.split('-')[0], timeframe), buffering = 1000) as f:
         #Starts inputting data into sql table with correct formatting
         for row in f:
+            #print(row)
             row_counter += 1
             row = json.loads(row)
             parent_id = row['parent_id']
@@ -57,3 +82,9 @@ row_counter = 0 #How many rows it's gone through
             subreddit = row['subreddit']
 
             parent_data = find_parent(parent_id)
+
+            if score >= 3: #only insert comments that have enough updoots
+                existing_comment_score = find_existing_score(parent_id)
+
+                if existing_comment_score:
+                    if score > existing_comment_score:
