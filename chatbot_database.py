@@ -18,13 +18,13 @@ def create_table(): #Creates table with correct elements if it doesn't already e
                 score INT)""")
 
 def format_data(data): #Formats the data before it's entered into the table
-    data = data.replace("\n", " newlinechar ").replace("\r", " newlinechar ").replace('""', "''")
+    data = data.replace("\n", " newlinecharacter ").replace("\r", " newlinecharacter ").replace('""', "''")
     return data
 
 
-def find_parent(pid): #Searches for parent, returns the result if one is found
+def find_parent(idpar): #Searches for parent, returns the result if one is found
     try:
-        sql = "SELECT comment FROM parent_reply WHERE comment_id = '{}' LIMIT 1".format(pid)
+        sql = "SELECT comment FROM parent_reply WHERE comment_id = '{}' LIMIT 1".format(idpar)
         c.execute(sql)
         result = c.fetchone()
 
@@ -37,9 +37,9 @@ def find_parent(pid): #Searches for parent, returns the result if one is found
         print ("ERROR - find_parent ", e)
         return False
 
-def find_existing_score(pid):
+def find_existing_score(idpar):
     try:
-        sql = "SELECT score FROM parent_reply WHERE parent_id = '{}' LIMIT 1".format(pid)
+        sql = "SELECT score FROM parent_reply WHERE parent_id = '{}' LIMIT 1".format(idpar)
         c.execute(sql)
         result = c.fetchone()
 
