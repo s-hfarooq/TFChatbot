@@ -7,9 +7,12 @@ timeframes = '2018-01' #File number
 sql_transaction = []
 start_row = 0
 cleanup = 1000000 #Frequency of cleanup
+bufferAmt = 400000 #How many comments get added to the buffer at one time
 
 connection = sqlite3.connect('{}.db'.format(timeframes))
 conn = connection.cursor()
+
+
 
 def create_table(): #Creates table with correct elements if it doesn't already exist
     conn.execute("""CREATE TABLE IF NOT EXISTS parent_reply(
@@ -21,14 +24,18 @@ def create_table(): #Creates table with correct elements if it doesn't already e
                             unix INT,
                             score INT)""")
 
+
+
 def format_data(data): #Formats the data before it's entered into the table
     data = data.replace('\n', ' newlinechar ').replace('\r', ' newlinechar ').replace('"', "'")
     return data
 
-def trans_bldr(sql):
+
+
+def trans_bldr(sql): #Sends the transaction once it's ready
     global sql_transaction
     sql_transaction.append(sql)
-    if len(sql_transaction) > 200000:
+    if len(sql_transaction) > bufferAmt:
         conn.execute('BEGIN TRANSACTION')
         for s in sql_transaction:
             try:
@@ -38,7 +45,9 @@ def trans_bldr(sql):
         connection.commit()
         sql_transaction = []
 
-def sql_i_RC(commentid, parentid, parent, comment, subreddit, time, score):
+
+
+def sql_i_RC(commentid, parentid, parent, comment, subreddit, time, score): #Inserts comment otherwise
     try:
         sql = """UPDATE parent_reply SET parent_id = ?,
                                 comment_id = ?,
@@ -49,9 +58,11 @@ def sql_i_RC(commentid, parentid, parent, comment, subreddit, time, score):
                                 score = ? WHERE parent_id =?;""".format(parentid, commentid, parent, comment, subreddit, int(time), score, parentid)
         trans_bldr(sql)
     except Exception as e:
-        print('s0 insertion', str(e))
+        print('s-RC insertion', str(e))
 
-def sql_i_HP(commentid, parentid, parent, comment, subreddit, time, score):
+
+
+def sql_i_HP(commentid, parentid, parent, comment, subreddit, time, score): #Inserts comment if a parent exists
     try:
         sql = """INSERT INTO parent_reply (parent_id,
                                 comment_id,
@@ -62,9 +73,11 @@ def sql_i_HP(commentid, parentid, parent, comment, subreddit, time, score):
                                 score) VALUES ("{}","{}","{}","{}","{}",{},{});""".format(parentid, commentid, parent, comment, subreddit, int(time), score)
         trans_bldr(sql)
     except Exception as e:
-        print('s0 insertion', str(e))
+        print('s-HAS_PARENT insertion', str(e))
 
-def sql_i_NP(commentid, parentid, comment, subreddit, time, score):
+
+
+def sql_i_NP(commentid, parentid, comment, subreddit, time, score): #Inserts comment if no parent exists
     try:
         sql = """INSERT INTO parent_reply (parent_id,
                                 comment_id,
@@ -74,9 +87,13 @@ def sql_i_NP(commentid, parentid, comment, subreddit, time, score):
                                 score) VALUES ("{}","{}","{}","{}",{},{});""".format(parentid, commentid, comment, subreddit, int(time), score)
         trans_bldr(sql)
     except Exception as e:
-        print('s0 insertion', str(e))
+        print('s-NO_PARENT insertion', str(e))
 
-def goodData(data):
+
+
+def goodData(data, subreddit):
+    #if 'gonewild' not in subreddit: #Just for Andrew
+    #    return False
     if data == '[removed]' or data == '[deleted]':
         return False
     elif len(data.split(' ')) > 1000 or len(data) < 1:
@@ -85,6 +102,7 @@ def goodData(data):
         return False
     else:
         return True
+
 
 
 def find_parent(pid): #Searches for parent, returns the result if one is found
@@ -96,7 +114,10 @@ def find_parent(pid): #Searches for parent, returns the result if one is found
             return result[0]
         else: return False
     except Exception as e:
+        print("ERROR (find_parent): ", str(e))
         return False
+
+
 
 def find_score(pid):
     try:
@@ -107,8 +128,13 @@ def find_score(pid):
             return result[0]
         else: return False
     except Exception as e:
-        #print(str(e))
+        print("ERROR (find_score): ", str(e))
         return False
+
+
+
+
+
 
 if __name__ == '__main__': #Execute if this is the main file
     row_counter = 0 #How many rows it's gone through
@@ -116,7 +142,7 @@ if __name__ == '__main__': #Execute if this is the main file
 
     create_table()
 
-    with open("D:/GitHub/TFChatbot/RC_{}".format(timeframes.split('-')[0], timeframes), buffering = 200000) as f:
+    with open("D:/GitHub/TFChatbot/RC_{}".format(timeframes.split('-')[0], timeframes), buffering = bufferAmt) as f:
         #Starts inputting data into sql table with correct formatting
 
         for row in f:
@@ -137,12 +163,10 @@ if __name__ == '__main__': #Execute if this is the main file
 
                     existing_comment_score = find_score(parent_id)
                     if existing_comment_score:
-                        if score > existing_comment_score:
-                            if goodData(body):
+                        if score > existing_comment_score and goodData(body, subreddit):
                                 sql_i_RC(comment_id, parent_id, parent_data, body, subreddit, created_utc, score)
-
                     else:
-                        if goodData(body):
+                        if goodData(body, subreddit):
                             if parent_data:
                                 if score >= 3: #Only insert comments that have enough upvotes
                                     sql_i_HP(comment_id, parent_id, parent_data, body, subreddit, created_utc, score)
@@ -155,7 +179,7 @@ if __name__ == '__main__': #Execute if this is the main file
             if row_counter % 100000 == 0: #Prints progress
                 print('Total Rows Read: {}, Paired Rows: {}, Time: {}'.format(row_counter, paired_rows, str(datetime.now())))
 
-            if row_counter > start_row: #Removes comments with null parents
+            if row_counter > start_row: #Removes comments with null parents, comment out if you want all comments
                 if row_counter % cleanup == 0:
                     print("Clean")
                     sql = "DELETE FROM parent_reply WHERE parent IS NULL"
