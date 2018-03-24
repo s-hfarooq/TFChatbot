@@ -3,7 +3,9 @@ import json
 import time
 from datetime import datetime
 
-timeframes = '2018-01' #File number
+
+
+timeframes = '2015-05' #File name
 sql_transaction = []
 start_row = 0
 cleanup = 1000000 #Frequency of cleanup
@@ -47,21 +49,6 @@ def trans_bldr(sql): #Sends the transaction once it's ready
 
 
 
-def sql_i_RC(commentid, parentid, parent, comment, subreddit, time, score): #Inserts comment otherwise
-    try:
-        sql = """UPDATE parent_reply SET parent_id = ?,
-                                comment_id = ?,
-                                parent = ?,
-                                comment = ?,
-                                subreddit = ?,
-                                unix = ?,
-                                score = ? WHERE parent_id =?;""".format(parentid, commentid, parent, comment, subreddit, int(time), score, parentid)
-        trans_bldr(sql)
-    except Exception as e:
-        print('s-RC insertion', str(e))
-
-
-
 def sql_i_HP(commentid, parentid, parent, comment, subreddit, time, score): #Inserts comment if a parent exists
     try:
         sql = """INSERT INTO parent_reply (parent_id,
@@ -91,9 +78,22 @@ def sql_i_NP(commentid, parentid, comment, subreddit, time, score): #Inserts com
 
 
 
-def goodData(data, subreddit):
-    #if 'gonewild' not in subreddit: #Just for Andrew
-    #    return False
+def sql_i_RC(commentid, parentid, parent, comment, subreddit, time, score): #Inserts comment otherwise
+    try:
+        sql = """UPDATE parent_reply SET parent_id = ?,
+                                comment_id = ?,
+                                parent = ?,
+                                comment = ?,
+                                subreddit = ?,
+                                unix = ?,
+                                score = ? WHERE parent_id =?;""".format(parentid, commentid, parent, comment, subreddit, int(time), score, parentid)
+        trans_bldr(sql)
+    except Exception as e:
+        print('s-RC insertion', str(e))
+
+
+
+def goodData(data): #Makes sure comments aren't removed and aren't too short/long
     if data == '[removed]' or data == '[deleted]':
         return False
     elif len(data.split(' ')) > 1000 or len(data) < 1:
@@ -119,14 +119,15 @@ def find_parent(pid): #Searches for parent, returns the result if one is found
 
 
 
-def find_score(pid):
+def find_score(pid): #Gets score of comment
     try:
         sql = "SELECT score FROM parent_reply WHERE parent_id = '{}' LIMIT 1".format(pid)
         conn.execute(sql)
         result = conn.fetchone()
         if result != None:
             return result[0]
-        else: return False
+        else:
+            return False
     except Exception as e:
         print("ERROR (find_score): ", str(e))
         return False
@@ -137,12 +138,12 @@ def find_score(pid):
 
 
 if __name__ == '__main__': #Execute if this is the main file
-    row_counter = 0 #How many rows it's gone through
-    paired_rows = 0 #Parent/child pairs
+    row_counter = 0
+    paired_rows = 0
 
     create_table()
 
-    with open("D:/GitHub/TFChatbot/RC_{}".format(timeframes.split('-')[0], timeframes), buffering = bufferAmt) as f:
+    with open("D:\GitHub\TFChatbot\RC_{}".format(timeframes.split('-')[0], timeframes), buffering = bufferAmt) as f:
         #Starts inputting data into sql table with correct formatting
 
         for row in f:
@@ -163,10 +164,10 @@ if __name__ == '__main__': #Execute if this is the main file
 
                     existing_comment_score = find_score(parent_id)
                     if existing_comment_score:
-                        if score > existing_comment_score and goodData(body, subreddit):
+                        if score > existing_comment_score and goodData(body):
                                 sql_i_RC(comment_id, parent_id, parent_data, body, subreddit, created_utc, score)
                     else:
-                        if goodData(body, subreddit):
+                        if goodData(body):
                             if parent_data:
                                 if score >= 3: #Only insert comments that have enough upvotes
                                     sql_i_HP(comment_id, parent_id, parent_data, body, subreddit, created_utc, score)
@@ -181,7 +182,7 @@ if __name__ == '__main__': #Execute if this is the main file
 
             if row_counter > start_row: #Removes comments with null parents, comment out if you want all comments
                 if row_counter % cleanup == 0:
-                    print("Clean")
+                    print("Cleaning")
                     sql = "DELETE FROM parent_reply WHERE parent IS NULL"
                     conn.execute(sql)
                     connection.commit()

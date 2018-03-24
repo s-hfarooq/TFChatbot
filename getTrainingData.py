@@ -1,12 +1,16 @@
 import sqlite3
 import pandas as pnds
 
-timeframes = '2018-01' #File number
+
+
+timeframes = '2018-01' #File name
 
 def makeF(fileName, contentN): #Makes input/output files
     with open("{}.from".format(fileName), 'a', encoding = 'utf8') as f:
         for content in df['{}'.format(contentN)].values:
             f.write(content + '\n')
+
+
 
 for timeframe in timeframes: #Starts file process for all db files
     connection = sqlite3.connect('2018-01.db')
