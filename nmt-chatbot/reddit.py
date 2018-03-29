@@ -5,7 +5,7 @@ bot = praw.Reddit(user_agent='HAFARChatbot',
                   client_id='MGrVVdzfCb2xsw',
                   client_secret='ZGejvhDkQnF6W_bJkBU6x7nLymM',
                   username='IAnAtoN',
-                  password='BotAccountPassword321!') #Login using bot account and app settings
+                  password='#TODO - REPLACE WITH PASSWORD') #Login using bot account and app settings
 
 
 subreddit = bot.subreddit('IAnAtoN') #Subreddit for posting
