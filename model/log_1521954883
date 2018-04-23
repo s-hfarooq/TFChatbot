@@ -1,0 +1,33 @@
+# log_file=/media/hf/STORAGE/GitHub/TFChatbot/nmt-chatbot/model/log_1521954883
+# Start step 0, lr 0.001, Sat Mar 24 22:14:48 2018
+  global step 100 lr 0.001 step-time 0.75s wps 7.80K ppl 1360.62 gN 28.68 bleu 0.00
+  global step 200 lr 0.001 step-time 0.69s wps 8.53K ppl 437.33 gN 11.86 bleu 0.00
+  global step 300 lr 0.001 step-time 0.70s wps 8.49K ppl 303.01 gN 9.42 bleu 0.00
+  global step 400 lr 0.001 step-time 0.70s wps 8.50K ppl 262.72 gN 8.33 bleu 0.00
+  global step 500 lr 0.001 step-time 0.69s wps 8.39K ppl 234.96 gN 8.87 bleu 0.00
+  global step 600 lr 0.001 step-time 0.71s wps 8.42K ppl 217.29 gN 8.05 bleu 0.00
+  global step 700 lr 0.001 step-time 0.70s wps 8.43K ppl 203.34 gN 7.84 bleu 0.00
+  global step 800 lr 0.001 step-time 0.70s wps 8.42K ppl 197.72 gN 7.33 bleu 0.00
+  global step 900 lr 0.001 step-time 0.70s wps 8.37K ppl 188.89 gN 7.46 bleu 0.00
+  global step 1000 lr 0.001 step-time 0.73s wps 7.80K ppl 154.71 gN 8.24 bleu 0.00
+  global step 1100 lr 0.001 step-time 0.71s wps 8.27K ppl 145.90 gN 7.85 bleu 0.00
+  global step 1200 lr 0.001 step-time 0.69s wps 8.49K ppl 143.88 gN 7.67 bleu 0.00
+  global step 1300 lr 0.001 step-time 0.69s wps 8.48K ppl 141.22 gN 7.29 bleu 0.00
+  global step 1400 lr 0.001 step-time 0.70s wps 8.44K ppl 140.52 gN 7.26 bleu 0.00
+  global step 1500 lr 0.001 step-time 0.69s wps 8.50K ppl 137.37 gN 7.09 bleu 0.00
+  global step 1600 lr 0.001 step-time 0.69s wps 8.54K ppl 133.51 gN 7.19 bleu 0.00
+  global step 1700 lr 0.001 step-time 0.70s wps 8.51K ppl 133.16 gN 7.11 bleu 0.00
+  global step 1800 lr 0.001 step-time 0.69s wps 8.47K ppl 136.17 gN 7.06 bleu 0.00
+  global step 1900 lr 0.001 step-time 0.73s wps 7.86K ppl 109.82 gN 7.57 bleu 0.82
+  global step 2000 lr 0.001 step-time 0.69s wps 8.53K ppl 89.65 gN 8.27 bleu 0.82
+  global step 2100 lr 0.001 step-time 0.69s wps 8.51K ppl 91.85 gN 8.37 bleu 0.82
+  global step 2200 lr 0.001 step-time 0.70s wps 8.45K ppl 92.44 gN 8.33 bleu 0.82
+  global step 2300 lr 0.001 step-time 0.70s wps 8.36K ppl 91.73 gN 7.99 bleu 0.82
+  global step 2400 lr 0.001 step-time 0.69s wps 8.48K ppl 92.49 gN 8.18 bleu 0.82
+  global step 2500 lr 0.001 step-time 0.69s wps 8.54K ppl 94.21 gN 8.20 bleu 0.82
+  global step 2600 lr 0.001 step-time 0.69s wps 8.56K ppl 93.84 gN 8.04 bleu 0.82
+  global step 2700 lr 0.001 step-time 0.69s wps 8.56K ppl 94.04 gN 8.02 bleu 0.82
+  global step 2800 lr 0.001 step-time 0.73s wps 7.81K ppl 78.55 gN 8.53 bleu 0.95
+  global step 2900 lr 0.001 step-time 0.68s wps 8.52K ppl 50.42 gN 9.91 bleu 0.95
+  global step 3000 lr 0.001 step-time 0.69s wps 8.51K ppl 51.71 gN 10.15 bleu 0.95
+  global step 3100 lr 0.001 step-time 0.70s wps 8.44K ppl 52.53 gN 10.07 bleu 0.95

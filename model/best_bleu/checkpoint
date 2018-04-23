@@ -1,0 +1,4 @@
+model_checkpoint_path: "/media/hf/STORAGE/GitHub/TFChatbot/nmt-chatbot/model/best_bleu/translate.ckpt-31000"
+all_model_checkpoint_paths: "/media/hf/STORAGE/GitHub/TFChatbot/nmt-chatbot/model/best_bleu/translate.ckpt-20000"
+all_model_checkpoint_paths: "/media/hf/STORAGE/GitHub/TFChatbot/nmt-chatbot/model/best_bleu/translate.ckpt-21000"
+all_model_checkpoint_paths: "/media/hf/STORAGE/GitHub/TFChatbot/nmt-chatbot/model/best_bleu/translate.ckpt-31000"

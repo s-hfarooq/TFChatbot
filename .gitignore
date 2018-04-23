@@ -1,0 +1,9 @@
+# Large model files
+*.data-00000-of-00001
+*.meta
+*.index
+
+
+# Large original text files
+*.to
+*.from
