@@ -7,13 +7,13 @@ import time
 
 
 postComment = True #True means it posts the comment to Reddit
+botPass = 'ENTER_PASSWORD'
 
-
-bot = praw.Reddit(user_agent='HAFARChatbot',
-                  client_id='MGrVVdzfCb2xsw',
-                  client_secret='ZGejvhDkQnF6W_bJkBU6x7nLymM',
-                  username='IAnAtoN',
-                  password='BotAccountPassword321!') #Login using bot account and app settings
+bot = praw.Reddit(user_agent = 'HAFARChatbot',
+                  client_id = 'MGrVVdzfCb2xsw',
+                  client_secret = 'ZGejvhDkQnF6W_bJkBU6x7nLymM',
+                  username = 'IAnAtoN',
+                  password = botPass) #Login using bot account and app settings
 
 
 
